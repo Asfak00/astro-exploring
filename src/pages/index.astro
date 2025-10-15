@@ -1,0 +1,13 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Welcome from '../components/Welcome.astro';
+import GreatPost from '../components/markdown.mdx';
+import Pre from "../components/Pre.astro";
+---
+
+<Layout>
+    <Welcome/>
+    <div class="max-w-[1050px] prose prose-slate mx-auto">
+        <GreatPost components={{pre: Pre}}/>
+    </div>
+</Layout>

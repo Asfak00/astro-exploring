@@ -1,0 +1,48 @@
+<div class="relative group">
+    <pre class="pre-content"><slot/></pre>
+    <button
+            class="copy-button cursor-pointer absolute top-2 right-2 bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-sm opacity-0 group-hover:opacity-100 transition-opacity"
+            data-copy
+    >
+        Copy
+    </button>
+</div>
+
+<script>
+    function setupCopyButtons() {
+        const buttons = document.querySelectorAll('[data-copy]');
+
+        buttons.forEach(button => {
+            const newButton = button.cloneNode(true);
+            button.parentNode?.replaceChild(newButton, button);
+
+            newButton.addEventListener('click', () => {
+                const container = newButton.parentElement;
+                const pre = container?.querySelector('pre');
+
+                const codeElement = pre?.querySelector('code') ||
+                    pre?.querySelector('[data-language]') ||
+                    pre?.querySelector('span');
+
+                const code = codeElement?.textContent || pre?.textContent || '';
+
+                navigator.clipboard.writeText(code.trim()).then(() => {
+                    newButton.textContent = 'Copied!';
+                    setTimeout(() => {
+                        newButton.textContent = 'Copy';
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Failed to copy:', err);
+                    newButton.textContent = 'Failed';
+                    setTimeout(() => {
+                        newButton.textContent = 'Copy';
+                    }, 2000);
+                });
+            });
+        });
+    }
+
+    setupCopyButtons();
+
+    document.addEventListener('astro:page-load', setupCopyButtons);
+</script>
